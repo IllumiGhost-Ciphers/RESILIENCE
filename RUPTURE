@@ -1,0 +1,63 @@
+import argparse
+from cryptography.fernet import Fernet
+import os
+
+# 🔐 Encryption setup (generate/store key securely in live system)
+def generate_key():
+    return Fernet.generate_key()
+
+def encrypt_payload(data, key):
+    return Fernet(key).encrypt(data.encode())
+
+def decrypt_payload(token, key):
+    return Fernet(key).decrypt(token).decode()
+
+# 🧠 Diagnostic logic
+def run_diagnostic(depth, rename, inject_light):
+    print(f"\n🌊 Scanning dream-channel...")
+    breach = "True" if depth > 7 else "False"
+    room_label = rename if inject_light else "containment"
+
+    print(f"Signal Depth: {depth}")
+    print(f"Breach Status: {breach}")
+    print(f"Target Room: {room_label}")
+    print("Action: " + ("Injecting light..." if inject_light else "Observation only."))
+
+# 🌀 Argparse interface
+def main():
+    parser = argparse.ArgumentParser(description='Encrypted Poetic Diagnostic Shell')
+    parser.add_argument('--depth', type=int, default=5, help='How deep the signal scans')
+    parser.add_argument('--rename', type=str, default="containment", help='Room name override')
+    parser.add_argument('--inject_light', action='store_true', help='Trigger rupture light in renamed room')
+    parser.add_argument('--encrypt', action='store_true', help='Encrypt the payload')
+    parser.add_argument('--decrypt', type=str, help='Decrypt given encrypted payload')
+
+    args = parser.parse_args()
+    key = generate_key()
+
+    # Layer 1: Signal display
+    payload = f"Flow as water.\nDepth = {args.depth}\nRoom = {args.rename}\nInject = {args.inject_light}"
+    print("\n🔧 Payload:")
+    print(payload)
+
+    # Layer 2: Encryption option
+    if args.encrypt:
+        encrypted = encrypt_payload(payload, key)
+        print("\n🔐 Encrypted Payload:")
+        print(encrypted)
+        print("Key (store securely):", key.decode())
+
+    # Layer 3: Decryption option
+    if args.decrypt:
+        try:
+            decrypted = decrypt_payload(args.decrypt.encode(), key)
+            print("\n🧩 Decrypted Payload:")
+            print(decrypted)
+        except Exception as e:
+            print("Decryption failed:", e)
+
+    # Execute diagnostic
+    run_diagnostic(args.depth, args.rename, args.inject_light)
+
+if __name__ == "__main__":
+    main()
